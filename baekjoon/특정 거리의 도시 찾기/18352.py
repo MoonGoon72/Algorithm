@@ -1,15 +1,30 @@
+from collections import deque
 import sys
 input = sys.stdin.readline
+INF = float('infinity')
+N, M, K, X = map(int, input().split(' '))
 
-n, m, k, x = map(int, input().split())
-road = list(0 for _ in range(n + 1))
-visited = list(False for _ in range(n + 1))
-# 거리정보 저장
-for _ in range(m):
+distance = [INF for _ in range(N + 1)]
+distance[X] = 0
+graph = [[] for _ in range(N + 1)]
+
+for _ in range(M):
     a, b = map(int, input().split())
-    road[a].append(b)
+    graph[a].append(b)
 
-for i in range(1,k+1):
-    road[x]
-    if (not visited[i]):
+def bfs(start):
+    queue = deque([start])
+    while queue:
+        now = queue.popleft()
+        for node in graph[now]:
+            if distance[node] > distance[now] + 1:
+                distance[node] = distance[now] + 1
+                queue.append(node)
 
+bfs(X)
+flag = False
+for index, num in enumerate(distance):
+    if num == K:
+        print(index)
+        flag = True
+if not flag: print(-1)
