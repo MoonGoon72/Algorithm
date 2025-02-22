@@ -9,7 +9,7 @@ if n == 1:
     exit(0)
 
 def prime_numbers(num):
-    tmp = [True for _ in range(num + 1)]
+    tmp = [False, False] + [True for _ in range(num - 1)]
     n_sqrt = int(math.sqrt(num)) +1 
     for i in range(2, n_sqrt):
         if not tmp[i]:
