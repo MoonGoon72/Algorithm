@@ -12,22 +12,19 @@ dy = [-1, 1, 0, 0]
 dx = [0, 0, -1, 1]
 visited = [[False] * m for _ in range(n)]
 
-def make_t(y, x):
-    return [[(y, x), (y, x + 1), (y, x + 2), (y + 1, x + 1)],
-            [(y, x), (y, x - 1), (y, x - 2), (y + 1, x - 1)],
-            [(y, x), (y, x + 1), (y, x + 2), (y - 1, x + 1)],
-            [(y, x), (y - 1, x), (y - 2, x), (y - 1, x + 1)],
-            [(y, x), (y, x - 1), (y, x - 2), (y - 1, x - 1)],
-            [(y, x), (y + 1, x), (y + 2, x), (y + 1, x - 1)]]
-
 def check(y, x):
     return 0 <= y < n and 0 <= x < m
 
-def check_t(tetromino):
-    for y, x in tetromino:
-        if not (0 <= y < n and 0 <= x < m):
-            return False
-    return True
+def check_t(y, x):
+    global answer
+    neighbors = []
+    for i in range(4):
+        ny, nx = y + dy[i], x + dx[i]
+        if check(ny, nx):
+            neighbors.append(graph[ny][nx])
+    if len(neighbors) >= 3:
+        total = graph[y][x] + sum(sorted(neighbors, reverse=True)[:3])
+        answer = max(answer, total)
 
 def calc_t(tetromino):
     cnt = 0
@@ -56,9 +53,6 @@ for i in range(n):
         visited[i][j] = True
         dfs(graph, 1, graph[i][j], i, j)
         visited[i][j] = False
-        t_blocks = make_t(i, j)
-        for t_block in t_blocks:
-            if check_t(t_block):
-                answer = max(answer, calc_t(t_block))
+        check_t(i, j)
 
 print(answer)
